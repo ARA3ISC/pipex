@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 23:09:54 by maneddam          #+#    #+#             */
-/*   Updated: 2023/03/18 00:20:42 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/03/19 15:07:47 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ typedef struct s_data
 	int second_child;
 }				t_data;
 
-void	print_error(char *msg, int nb);
+void	cmd_not_found(char *cmd);
+void	print_error();
 
 char	**ft_split(char *s, char c);
 char	*ft_strchr(const char *s, int c);

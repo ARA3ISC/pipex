@@ -1,1 +1,9 @@
-      10      10      84
+CC = @cc
+	@make -C costumizing/
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@make -C costumizing mse7
+	@$(RM) $(OBJ)
+	@echo "\033[0m"
+	@$(RM) $(NAME)
+	@$(RM) $(NAME)
+	@$(RM) $(B_NAME)

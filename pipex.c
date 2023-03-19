@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 23:09:40 by maneddam          #+#    #+#             */
-/*   Updated: 2023/03/18 00:26:57 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/03/19 15:16:47 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,43 +61,40 @@ void	check_cmds(char **env, char *cmd)
 			i++;
 		}
 	}
-	ft_printf("command not found: %s\n", cmd);
-	exit(127);
+	cmd_not_found(cmd);
 }
 
 void	first_event(t_data data, char *argv[], char **env)
 {
-	data.fd_infile = open(argv[1], O_RDWR, O_CREAT, O_TRUNC);
+	data.fd_infile = open(argv[1], O_RDWR | O_CREAT | O_TRUNC);
 	if (data.fd_infile == -1)
-		print_error("Error fd", 1);
+		print_error();
 
-	// close(data.fds[0]);
+	close(data.fds[0]);
 	if (dup2(data.fd_infile, 0) == -1)
-		print_error("Error dup", 1);
+		print_error();
 
 	if (dup2(data.fds[1], 1) == -1)
 	{
-		print_error("Error dupp", 1);
+		print_error();
 	}
 	check_cmds(env, argv[2]);
 }
 
 void	second_event(t_data data, char *argv[], char **env)
 {
-	// ft_printf("%s\n", argv[5]);
-	// exit(1);
 	data.fd_outfile = open(argv[4], O_RDWR | O_CREAT |  O_TRUNC, 644);
 	if (data.fd_outfile == -1)
-		print_error("Error fd", 1);
+		print_error();
 
 	close(data.fds[1]);
 	if (dup2(data.fd_outfile, 1) == -1)
-		print_error("Error dup", 1);
+		print_error();
 
 	if (dup2(data.fds[0], 0) == -1)
 	{
 
-		print_error("Error dupp", 1);
+		print_error();
 	}
 	check_cmds(env, argv[3]);
 }
@@ -107,19 +104,19 @@ void	begin_processing(char *argv[], char **env)
 	t_data data;
 
 	if (pipe(data.fds) == -1)
-		print_error("Pipe", 1);
+		print_error();
 
 
 	data.first_child = fork();
 	if (data.first_child == -1)
-		print_error("Error forking", 1);
+		print_error();
 
 	if (data.first_child == 0)
 		first_event(data, argv, env);
 
 	data.second_child = fork();
 	if (data.second_child == -1)
-		print_error("Error forking", 1);
+		print_error();
 
 	if (data.second_child == 0)
 		second_event(data, argv, env);
